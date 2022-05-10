@@ -1,6 +1,6 @@
 <template>
-  <div class="slides-wrapper" :class="{ loading: isLoading || !images.length }">
-    <template v-if="images.length">
+  <div class="slides-wrapper" :class="{ loading: isLoading || !loaded }">
+    <template v-if="loaded">
       <button
         class="btn btn-primary btn-action btn-lg slides-prev"
         @click="changeSlide(-1)"
@@ -44,19 +44,20 @@ export default {
     return {
       active: 0,
       isLoading: false,
+      loaded: false,
     };
   },
   //    how to make first image appear when is fully loaded?
   ///////////////////////////////////////////////////////////
-  //   watch: {
-  //     images(newValue, oldValue) {
-  //       if (oldValue.length === 0 && newValue.length !== 0) {
-  //         preloadImage(this.activeUrl).then(() => {
-  //           this.loaded = true;
-  //         });
-  //       }
-  //     },
-  //   },
+  watch: {
+    images(newValue, oldValue) {
+      if (oldValue.length === 0 && newValue.length !== 0) {
+        preloadImage(this.activeUrl).then(() => {
+          this.loaded = true;
+        });
+      }
+    },
+  },
   //   created() {
   //     this.isLoading = true;
   //     preloadImage(this.activeUrl).then(() => {
