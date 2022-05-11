@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <h1>Gallery</h1>
-    <slideshow :images="images" />
+    <router-view :images="images" />
   </div>
 </template>
 

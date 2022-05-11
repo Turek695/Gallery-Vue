@@ -18,6 +18,11 @@ export default {
 <style scoped>
 figure.figure {
   transition: opacity 0.2s ease-in-out;
+  height: 100%;
+}
+
+img {
+  max-height: 100%;
 }
 
 .dimmed {

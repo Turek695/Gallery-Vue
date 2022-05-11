@@ -42,13 +42,13 @@ export default {
   },
   data() {
     return {
-      active: 0,
+      active: Number(this.$route.params.index - 1),
       isLoading: false,
       loaded: false,
+      buttonSwitch: false,
     };
   },
-  //    how to make first image appear when is fully loaded?
-  ///////////////////////////////////////////////////////////
+
   watch: {
     images(newValue, oldValue) {
       if (oldValue.length === 0 && newValue.length !== 0) {
@@ -57,25 +57,37 @@ export default {
         });
       }
     },
-  },
-  //   created() {
-  //     this.isLoading = true;
-  //     preloadImage(this.activeUrl).then(() => {
-  //       this.isLoading = false;
-  //     });
-  //   },
-  methods: {
-    changeSlide(value) {
-      let newIndex = this.active + value;
-      if (newIndex >= 0) {
-        newIndex %= this.images.length;
-      } else {
-        newIndex = this.images.length - 1;
+    $route() {
+      if (!this.buttonSwitch) {
+        this.changeSlide(0, Number(this.$route.params.index));
       }
-      this.active = newIndex;
+      this.buttonSwitch = false;
+    },
+  },
+  methods: {
+    changeSlide(factor, value = false) {
+      let newIndex;
+      if (value) {
+        this.buttonSwitch = false;
+        newIndex = value - 1;
+      } else {
+        this.buttonSwitch = true;
+        newIndex = this.active + factor;
+        if (newIndex >= 0) {
+          newIndex %= this.images.length;
+        } else {
+          newIndex = this.images.length - 1;
+        }
+      }
+
       this.isLoading = true;
       preloadImage(this.images[newIndex].url).then(() => {
+        this.active = newIndex;
         this.isLoading = false;
+        this.$router.push(`/slide/${this.active + 1}`); // www address update
+        if (value != false) {
+          console.log("jest");
+        }
       });
     },
   },
